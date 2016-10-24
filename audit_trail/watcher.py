@@ -146,7 +146,7 @@ class AuditTrailWatcher(object):
                 default = field.default
 
             old_value = old_values.get(field_name, default)
-            new_value = new_values.get(field_name, None)
+            new_value = new_values.get(field_name, default)
 
             if not ModelFieldComparator.compare(field, old_value, new_value):
 
