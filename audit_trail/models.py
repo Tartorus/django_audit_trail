@@ -103,7 +103,7 @@ class AuditTrailManager(models.Manager):
 
         request = get_request(['user', 'META'])
         if request and hasattr(request, 'user'):
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 audit_trail.user = request.user
             audit_trail.user_ip = request.META.get('HTTP_X_FORWARDED_FOR', None) or request.META.get('REMOTE_ADDR')
         audit_trail.save()
@@ -139,12 +139,12 @@ class AuditTrail(models.Model):
 
     """ Table to store all changes of subscribed models. """
     content_type = models.ForeignKey(ContentType, blank=True, null=True,
-                                     verbose_name=_('content type'))
+                                     verbose_name=_('content type'), on_delete=models.SET_NULL)
     object_id = models.TextField(blank=True, null=True)
     content_object = GenericForeignKey('content_type', 'object_id')
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True,
-                             verbose_name=_('user'))
+                             verbose_name=_('user'), on_delete=models.SET_NULL)
     user_ip = models.GenericIPAddressField(_('IP address'), null=True)
 
     object_repr = models.CharField(_('object repr'), max_length=200)
@@ -154,7 +154,7 @@ class AuditTrail(models.Model):
 
     changes = JSONField(dump_kwargs=DUMP_KWARGS)
 
-    related_trail = models.ForeignKey(to='self', null=True)
+    related_trail = models.ForeignKey(to='self', null=True, on_delete=models.SET_NULL)
 
     objects = AuditTrailManager()
 

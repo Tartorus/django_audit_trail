@@ -3,6 +3,8 @@ from django.conf import settings
 from django.db.models import signals, NOT_PROVIDED
 from django.db.models.expressions import CombinedExpression
 
+from audit_trail.comparator import ModelFieldComparator
+
 try:
     from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor, ReverseOneToOneDescriptor
 except ImportError:
@@ -144,24 +146,26 @@ class AuditTrailWatcher(object):
                 default = field.default
 
             old_value = old_values.get(field_name, default)
-            new_value = new_values.get(field_name, None)
+            new_value = new_values.get(field_name, default)
 
-            old_value_string = ModelFieldStringifier.stringify(field, old_value)
-            new_value_string = ModelFieldStringifier.stringify(field, new_value)
+            if not ModelFieldComparator.compare(field, old_value, new_value):
 
-            if old_value is not None:
-                old_value = force_text(old_value)
+                old_value_string = ModelFieldStringifier.stringify(field, old_value)
+                new_value_string = ModelFieldStringifier.stringify(field, new_value)
 
-            if new_value is not None:
-                new_value = force_text(new_value)
+                if old_value is not None:
+                    old_value = force_text(old_value)
 
-            if old_value != new_value:
+                if new_value is not None:
+                    new_value = force_text(new_value)
+
                 diff[field_name] = {
                     'old_value': old_value,
                     'old_value_string': old_value_string,
                     'new_value': new_value,
                     'new_value_string': new_value_string
                 }
+
         return diff
 
     def on_post_init(self, instance, sender, **kwargs):

@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='audittrail',
             name='related_trail',
-            field=models.ForeignKey(to='audit_trail.AuditTrail', null=True),
+            field=models.ForeignKey(to='audit_trail.AuditTrail', null=True, on_delete=models.SET_NULL),
             preserve_default=True,
         ),
         migrations.AlterField(

@@ -23,8 +23,8 @@ class Migration(migrations.Migration):
                 ('action', models.PositiveSmallIntegerField(choices=[(1, b'Created'), (2, b'Updated'), (3, b'Deleted')])),
                 ('action_time', models.DateTimeField(auto_now=True)),
                 ('json_values', models.TextField()),
-                ('content_type', models.ForeignKey(blank=True, to='contenttypes.ContentType', null=True)),
-                ('user', models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True)),
+                ('content_type', models.ForeignKey(blank=True, to='contenttypes.ContentType', null=True, on_delete=models.SET_NULL)),
+                ('user', models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)),
             ],
             options={
                 'ordering': ('-action_time',),

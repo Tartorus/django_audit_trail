@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='audittrail',
             name='content_type',
-            field=models.ForeignKey(verbose_name='content type', blank=True, to='contenttypes.ContentType', null=True),
+            field=models.ForeignKey(verbose_name='content type', blank=True, to='contenttypes.ContentType', null=True, on_delete=models.SET_NULL),
         ),
         migrations.AlterField(
             model_name='audittrail',
@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='audittrail',
             name='user',
-            field=models.ForeignKey(verbose_name='user', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(verbose_name='user', blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL),
         ),
         migrations.AlterField(
             model_name='audittrail',
